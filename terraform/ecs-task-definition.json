@@ -1,58 +1,75 @@
 {
-    "family": "myapp-task-def",
-    "networkMode": "awsvpc",
-    "requiresCompatibilities": ["FARGATE"],
-    "cpu": "512",
-    "memory": "1024",
-    "containerDefinitions": [
-      {
-        "name": "nginx",
-        "image": "458575205556.dkr.ecr.ap-south-1.amazonaws.com/nginx:latest",
-        "portMappings": [
-          {
-            "containerPort": 80,
-            "protocol": "tcp"
-          }
-        ],
-        "essential": true,
-        "dependsOn": [
-          {
-            "containerName": "app",
-            "condition": "START"
-          }
-        ]
-      },
-      {
-        "name": "app",
-        "image": "458575205556.dkr.ecr.ap-south-1.amazonaws.com/app:latest",
-        "portMappings": [
-          {
-            "containerPort": 3000,
-            "protocol": "tcp"
-          }
-        ],
-        "essential": true,
-        "environment": [
-          {
-            "name": "NODE_ENV",
-            "value": "production"
-          },
-          {
-            "name": "DB_HOST",
-            "value": "<YOUR_DB_ENDPOINT>"
-          },
-          {
-            "name": "DB_USER",
-            "value": "admin"
-          },
-          {
-            "name": "DB_PASSWORD",
-            "valueFrom": "arn:aws:secretsmanager:us-east-1:458575205556:secret:myapp-db-password"
-          }
-        ]
+  "family": "myapp-task-def",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::458575205556:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::458575205556:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
+    {
+      "name": "nginx",
+      "image": "458575205556.dkr.ecr.ap-south-1.amazonaws.com/nginx:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "dependsOn": [
+        {
+          "containerName": "app",
+          "condition": "START"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/myapp",
+          "awslogs-region": "ap-south-1",
+          "awslogs-stream-prefix": "nginx"
+        }
       }
-    ],
-    "executionRoleArn": "arn:aws:iam::458575205556:role/ecsTaskExecutionRole",
-    "taskRoleArn": "arn:aws:iam::458575205556:role/ecsTaskExecutionRole"
-  }
-  
+    },
+    {
+      "name": "app",
+      "image": "458575205556.dkr.ecr.ap-south-1.amazonaws.com/app:latest",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 3000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "NODE_ENV",
+          "value": "production"
+        },
+        {
+          "name": "DB_HOST",
+          "value": "<YOUR_DB_ENDPOINT>"
+        },
+        {
+          "name": "DB_USER",
+          "value": "admin"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:ap-south-1:458575205556:secret:myapp-db-password"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/myapp",
+          "awslogs-region": "ap-south-1",
+          "awslogs-stream-prefix": "app"
+        }
+      }
+    }
+  ]
+}
