@@ -46,27 +46,3 @@ resource "aws_security_group" "db" {
     Name = "MyApp DB SG"
   }
 }
-
-resource "aws_security_group" "ecs_service" {
-  name   = "ecs-service-sg"
-  vpc_id = var.vpc_id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-    description = "Allow HTTP from ALB"
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name = "ECS Service SG"
-  }
-}
