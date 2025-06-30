@@ -1,5 +1,5 @@
-resource "aws_db_subnet_group" "default" {
-  name       = "myapp-db-subnet-group"
+resource "aws_db_subnet_group" "default1" {
+  name       = "myapp-db-subnet-group-1"
   subnet_ids = var.subnets
 
   tags = {
@@ -17,7 +17,7 @@ resource "aws_db_instance" "myapp_db" {
   db_name                 = "myappdb"
   username                = "admin"
   password                = aws_secretsmanager_secret_version.db_password_version.secret_string
-  db_subnet_group_name    = aws_db_subnet_group.default.name
+  db_subnet_group_name    = aws_db_subnet_group.default1.name
   skip_final_snapshot     = true
   publicly_accessible     = false
   vpc_security_group_ids  = [aws_security_group.db.id]
