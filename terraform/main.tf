@@ -5,6 +5,16 @@ provider "aws" {
   region = "ap-south-1"
 }
 
+terraform {
+  backend "s3" {
+    bucket         = "my-terraform-state-bucket-sk08" 
+    key            = "myapp/terraform.tfstate"
+    region         = "ap-south-1"
+    dynamodb_table = "terraform-locks"
+    encrypt        = true
+  }
+}
+
 resource "aws_ecr_repository" "app" {
   name = "myapp"
 }
