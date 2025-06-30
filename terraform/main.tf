@@ -108,7 +108,7 @@ resource "aws_secretsmanager_secret" "db_password" {
 resource "aws_secretsmanager_secret_version" "db_password_version" {
   secret_id     = aws_secretsmanager_secret.db_password.id
 #   secret_string = "REPLACE_WITH_SECURE_PASSWORD"
-  secret_string = "sk08"
+  secret_string = "sk081234"
 }
 # Add your ECS Service, Load Balancer, Target Group, etc.
 
