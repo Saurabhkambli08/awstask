@@ -2,7 +2,7 @@
 # Add your ECS, ALB, Task Definition, Service here
 
 provider "aws" {
-  region = "us-east-1"
+  region = "ap-south-1"
 }
 
 resource "aws_ecr_repository" "app" {
