@@ -32,6 +32,6 @@ variable "desired_count" {
   default     = 2
 }
 
-variable "db_username" {}
+# variable "db_username" {}
 # variable "db_password" {}
 # variable "domain_name" {}
