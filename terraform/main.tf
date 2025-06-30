@@ -111,7 +111,7 @@ resource "aws_ecs_task_definition" "app_nginx" {
 
 
 resource "aws_secretsmanager_secret" "db_password" {
-  name = "myapp-db-password"
+  name = "myapp-db-password-1"
   description = "Database password for myapp"
 }
 
