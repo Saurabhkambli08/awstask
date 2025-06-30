@@ -185,13 +185,8 @@ resource "aws_lb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
-    type = "redirect"
-
-    redirect {
-      port        = "443"
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-    }
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.ecs_tg.arn
   }
 }
 
@@ -236,4 +231,6 @@ resource "aws_ecs_service" "app" {
     container_name   = "nginx"
     container_port   = 80
   }
+
+  depends_on = [aws_lb_listener.http]
 }
