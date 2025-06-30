@@ -1,0 +1,58 @@
+{
+    "family": "myapp-task-def",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": ["FARGATE"],
+    "cpu": "512",
+    "memory": "1024",
+    "containerDefinitions": [
+      {
+        "name": "nginx",
+        "image": "<YOUR_AWS_ACCOUNT_ID>.dkr.ecr.<YOUR_AWS_REGION>.amazonaws.com/nginx:latest",
+        "portMappings": [
+          {
+            "containerPort": 80,
+            "protocol": "tcp"
+          }
+        ],
+        "essential": true,
+        "dependsOn": [
+          {
+            "containerName": "app",
+            "condition": "START"
+          }
+        ]
+      },
+      {
+        "name": "app",
+        "image": "<YOUR_AWS_ACCOUNT_ID>.dkr.ecr.<YOUR_AWS_REGION>.amazonaws.com/app:latest",
+        "portMappings": [
+          {
+            "containerPort": 3000,
+            "protocol": "tcp"
+          }
+        ],
+        "essential": true,
+        "environment": [
+          {
+            "name": "NODE_ENV",
+            "value": "production"
+          },
+          {
+            "name": "DB_HOST",
+            "value": "<YOUR_DB_ENDPOINT>"
+          },
+          {
+            "name": "DB_USER",
+            "value": "admin"
+          },
+          {
+            "name": "DB_PASSWORD",
+            "valueFrom": "arn:aws:secretsmanager:us-east-1:ACCOUNT_ID:secret:myapp-db-password"
+          }
+        ]
+      }
+    ],
+    "executionRoleArn": "arn:aws:iam::<YOUR_AWS_ACCOUNT_ID>:role/ecsTaskExecutionRole",
+    "taskRoleArn": "arn:aws:iam::<YOUR_AWS_ACCOUNT_ID>:role/ecsTaskExecutionRole"
+  }
+  
