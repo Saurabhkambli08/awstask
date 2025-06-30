@@ -16,7 +16,7 @@ subnets = [
 ]
 
 # Desired task count for ECS Service
-desired_count = 2
+desired_count = 1
 
 # Optional: specify image tags if using versioned builds
 app_image_tag   = "latest"

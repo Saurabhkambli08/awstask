@@ -218,6 +218,7 @@ resource "aws_ecs_service" "app" {
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.app_nginx.arn
   desired_count   = var.desired_count
+  health_check_grace_period_seconds  = 10
   launch_type     = "FARGATE"
 
   network_configuration {
