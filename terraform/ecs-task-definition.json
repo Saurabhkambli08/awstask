@@ -7,7 +7,7 @@
     "containerDefinitions": [
       {
         "name": "nginx",
-        "image": "<YOUR_AWS_ACCOUNT_ID>.dkr.ecr.<YOUR_AWS_REGION>.amazonaws.com/nginx:latest",
+        "image": "458575205556.dkr.ecr.ap-south-1.amazonaws.com/nginx:latest",
         "portMappings": [
           {
             "containerPort": 80,
@@ -24,7 +24,7 @@
       },
       {
         "name": "app",
-        "image": "<YOUR_AWS_ACCOUNT_ID>.dkr.ecr.<YOUR_AWS_REGION>.amazonaws.com/app:latest",
+        "image": "458575205556.dkr.ecr.ap-south-1.amazonaws.com/app:latest",
         "portMappings": [
           {
             "containerPort": 3000,
@@ -47,12 +47,12 @@
           },
           {
             "name": "DB_PASSWORD",
-            "valueFrom": "arn:aws:secretsmanager:us-east-1:ACCOUNT_ID:secret:myapp-db-password"
+            "valueFrom": "arn:aws:secretsmanager:us-east-1:458575205556:secret:myapp-db-password"
           }
         ]
       }
     ],
-    "executionRoleArn": "arn:aws:iam::<YOUR_AWS_ACCOUNT_ID>:role/ecsTaskExecutionRole",
-    "taskRoleArn": "arn:aws:iam::<YOUR_AWS_ACCOUNT_ID>:role/ecsTaskExecutionRole"
+    "executionRoleArn": "arn:aws:iam::458575205556:role/ecsTaskExecutionRole",
+    "taskRoleArn": "arn:aws:iam::458575205556:role/ecsTaskExecutionRole"
   }
   
