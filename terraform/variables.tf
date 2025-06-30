@@ -33,5 +33,5 @@ variable "desired_count" {
 }
 
 variable "db_username" {}
-variable "db_password" {}
+# variable "db_password" {}
 # variable "domain_name" {}
