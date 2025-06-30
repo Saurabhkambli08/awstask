@@ -167,6 +167,7 @@ resource "aws_lb_target_group" "ecs_tg" {
   protocol = "HTTP"
   vpc_id   = var.vpc_id
 
+  target_type = "ip"
   health_check {
     path                = "/"
     interval            = 30
