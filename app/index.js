@@ -1,46 +1,50 @@
 const express = require('express');
-const mysql = require('mysql2/promise');  // Use the promise version
+const mysql = require('mysql2/promise');
 
 const app = express();
 const port = 3000;
 
-// Pull DB details from env vars
 const dbHost = process.env.DB_HOST;
-const dbUser = process.env.DB_USER;
+const dbUser = process.env.DB_USER || 'admin';
 const dbPassword = process.env.DB_PASSWORD;
-const dbName = process.env.DB_NAME || 'myappdb';  // fallback
+const dbName = process.env.DB_NAME || 'myappdb';
 
-// Create DB connection pool
+console.log('DB CONFIG:');
+console.log(`HOST: ${dbHost}`);
+console.log(`USER: ${dbUser}`);
+console.log(`DB: ${dbName}`);
+
 let pool;
 
-(async () => {
-  try {
-    pool = mysql.createPool({
-      host: dbHost,
-      user: dbUser,
-      password: dbPassword,
-      database: dbName,
-      waitForConnections: true,
-      connectionLimit: 10,
-      queueLimit: 0,
-    });
-    console.log('✅ Connected to MySQL!');
-  } catch (err) {
-    console.error('❌ DB connection error:', err);
-    process.exit(1);
-  }
-})();
-
+// ✅ ROOT PATH → uses DB
 app.get('/', async (req, res) => {
   try {
+    if (!pool) {
+      pool = mysql.createPool({
+        host: dbHost,
+        user: dbUser,
+        password: dbPassword,
+        database: dbName,
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0,
+      });
+      console.log('✅ DB pool created');
+    }
+
     const [rows] = await pool.query('SELECT NOW() AS now');
     res.send(`Hello from Node.js behind NGINX! DB time: ${rows[0].now}`);
   } catch (err) {
-    console.error(err);
+    console.error('❌ DB error:', err);
     res.status(500).send('DB error');
   }
 });
 
-app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`);
+// ✅ HEALTH PATH → NO DB CALL, always OK
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+app.listen(port, '0.0.0.0', () => {
+  console.log(`✅ App listening on http://0.0.0.0:${port}`);
 });
